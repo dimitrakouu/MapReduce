@@ -8,13 +8,12 @@ Create a reducer:
 
 """
 from mrjob.job import MRJob
-
+from mrjob.util import unique
 
 class IdsTrimmingCounter(MRJob):
     #define the mapper
     
     def mapper(self, key, record):
-      
         record = record.strip().split(',')
         if record[0] == "ip":
             return
@@ -22,14 +21,16 @@ class IdsTrimmingCounter(MRJob):
            ids= record[0]
            date = record[1]
            time = record[2][:5]
-           info = '%s %s %s' % (ids,date,time)
-           yield info, 1
-        
+           info = '%s' % (ids)
+           yield info, (ids, date, time)
 
-    def reducer(self, info, time):
-        
-        yield info, sum(time)
-        
+    def reducer(self, info, list):
+        prev, count = None, 0
+        for v in list:
+            if (v != prev):
+                count += 1
+                prev = v
+        yield info, count
 
 
 if __name__ == '__main__':
