@@ -24,9 +24,9 @@ class IdsTrimmingCounter(MRJob):
            info = '%s' % (ids)
            yield info, (ids, date, time)
 
-    def reducer(self, info, list):
+    def reducer(self, info, ids_list):
         prev, count = None, 0
-        for v in list:
+        for v in ids_list:
             if (v != prev):
                 count += 1
                 prev = v
