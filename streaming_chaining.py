@@ -8,7 +8,7 @@ Create a reducer:
 
 """
 from mrjob.job import MRJob
-from mrjob.util import unique
+
 
 class IdsTrimmingCounter(MRJob):
     #define the mapper
